@@ -10,5 +10,4 @@ public class TradingServiceApplication {
         SpringApplication.run(TradingServiceApplication.class, args);
     }
 
-
 }
