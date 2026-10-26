@@ -1,0 +1,14 @@
+services:
+  identity-postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: identity
+      POSTGRES_USER: identity
+      POSTGRES_PASSWORD: identity_local
+    ports:
+      - "127.0.0.1:5435:5432"
+    volumes:
+      - identity-data:/var/lib/postgresql/data
+
+volumes:
+  identity-data:
