@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
@@ -45,6 +46,9 @@ public class AuthController {
                                                HttpServletResponse servletResponse){
         Authentication authentication = authService.login(request);
 
+        // Rotate the session ID after successful login to prevent session fixation.
+        servletRequest.changeSessionId();
+
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
@@ -63,6 +67,10 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponse(authentication.getName()));
     }
 
+    @GetMapping("/csrf")
+    public CsrfToken csrf(CsrfToken csrfToken) {
+        return csrfToken;
+    }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(

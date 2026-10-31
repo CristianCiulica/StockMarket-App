@@ -1,7 +1,35 @@
-POST http://localhost:8082/api/auth/register
+@baseUrl = http://localhost:8082
+@csrfToken = paste-token-from-csrf-response
+
+### Run this GET first, copy its token into @csrfToken above, then send the POST requests one by one. IntelliJ keeps the session cookie in its HTTP Client cookie jar.
+GET {{baseUrl}}/api/auth/csrf
+
+### Register a demo user
+POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
+X-CSRF-TOKEN: {{csrfToken}}
 
 {
-  "email": "cristian@gmail.com",
-  "password": "parola123"
+  "email": "csrf.demo@example.com",
+  "password": "ChangeMe123!"
 }
+
+### Log in as the demo user
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrfToken}}
+
+{
+  "email": "csrf.demo@example.com",
+  "password": "ChangeMe123!"
+}
+
+### Check which user is authenticated in this session
+GET {{baseUrl}}/api/auth/me
+
+### Log out and invalidate the session
+POST {{baseUrl}}/api/auth/logout
+X-CSRF-TOKEN: {{csrfToken}}
+
+### After logout, this should return 401
+GET {{baseUrl}}/api/auth/me
