@@ -1,19 +1,41 @@
 package com.cristian.identity_service;
 
-import java.util.Date;
+import jakarta.persistence.*;
+
+import java.time.Instant;
 import java.util.UUID;
 
+@Entity
+@Table(name = "app_users")
 public class User {
-    private final UUID id;
-    private final String email;
-    private final String passwordHash;
-    private final Date dateCreated;
 
-    public User(UUID id, String email, String passwordHash, Date dateCreated){
-        this.id=id;
-        this.email=email;
-        this.dateCreated=dateCreated;
-        this.passwordHash=passwordHash;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(nullable = false, unique = true, length = 254)
+    private String email;
+
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt = Instant.now();
+
+    protected User() {
+    }
+
+    public User(String email, String passwordHash) {
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.createdAt = Instant.now();
+    }
+
+    public User(UUID id, String email, String passwordHash, Instant createdAt) {
+        this.id = id;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.createdAt = createdAt;
     }
 
     public UUID getId() {
@@ -28,7 +50,7 @@ public class User {
         return passwordHash;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 }
