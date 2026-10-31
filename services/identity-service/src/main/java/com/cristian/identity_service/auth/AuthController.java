@@ -5,6 +5,7 @@ import com.cristian.identity_service.dto.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,5 +61,22 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<LoginResponse> me(Authentication authentication) {
         return ResponseEntity.ok(new LoginResponse(authentication.getName()));
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse,
+            Authentication authentication) {
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+
+        logoutHandler.logout(
+                servletRequest,
+                servletResponse,
+                authentication
+        );
+
+        return ResponseEntity.noContent().build();
     }
 }
