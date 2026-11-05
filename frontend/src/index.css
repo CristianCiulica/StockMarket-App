@@ -1,3 +1,8 @@
+:root {
+    font-family: Inter, sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -11,9 +16,9 @@ body {
 
 body {
     min-height: 100vh;
-    background: #706b7e;
-    color: #f7f5fa;
-    font-family: Inter, Arial, sans-serif;
+    background: #06121f;
+    color: #f5f9ff;
+    font-family: Inter, sans-serif;
 }
 
 button,
